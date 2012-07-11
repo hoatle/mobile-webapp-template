@@ -11,6 +11,8 @@ Relationships are described in the schema sections. In the two initial files, fo
 
 Note that the data are served such that there are two top-level keys, 'Meta' and 'Objects.' The actual data are under Objects. Rewriting the Backbone parse function would probably help.
 
+Note Products have a set of images associated with them. Normally, it will be one main image with variants that have been resized on the server side. Each variant has its own url. These are returned in a JSON data package under "image_urls" as a javascript dictionary with the url name(description) as the key and the url itself as the value. The catalog layout should include the image of the appropriate size--even though you won't have sample images just now. 
+
 Initial Design Goals
 -------------------------
 The initial goal is to present the catalog in a mobile format, using the top-level categories only (for now).
@@ -22,6 +24,6 @@ The initial goal is to present the catalog in a mobile format, using the top-lev
 
 * UI should be a simple presentation of products, separated according to top-level category.
 * UI should contain an unobtrusive way of swapping between category views.
-* UI should assume each product will have an image (see Product schema file).
+* UI should assume each product will have an image (see above).
 
 
