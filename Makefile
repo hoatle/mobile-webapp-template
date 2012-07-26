@@ -60,7 +60,7 @@ run-prod: install
 run: run-prod
 
 deploy-dotcloud:
-	dotcloud push watpl
+	dotcloud push catalog
 
 deploy-heroku:
 	git push heroku master
