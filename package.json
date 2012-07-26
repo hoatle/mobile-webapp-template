@@ -1,0 +1,41 @@
+{
+  "name": "webapp-template",
+  "version": "0.0.1",
+  "description": "A web application template that manages the mapping and dispatching of action handlers with powerful APIs for your application",
+  "keywords": [
+    "webapp-template",
+    "web application"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com/hoatle/webapp-template.git"
+  },
+  "author": "Hoat Le <hoatlevan@gmail.com> (http://hoatle.net)",
+  "contributors": [],
+  "dependencies": {
+    "express": "2.5.10",
+    "jade": "0.26.1",
+    "winston": "0.5.11",
+    "underscore": "1.3.3",
+    "mongoose": "2.7.0",
+    "connect-less": "0.3.0"
+  },
+  "devDependencies": {
+    "supervisor": "0.4.1",
+    "mocha": "1.3.0",
+    "should": "0.6.3",
+    "less": "1.3.0",
+    "requirejs": "2.0.2",
+    "jshint": "0.7.1"
+  },
+  "scripts": {
+    "test": "make test",
+    "start": "server.js"
+  },
+  "engines": {
+    "node": ">= 0.4.x",
+    "npm": "1.1.x"
+  },
+  "node": "0.6.19",
+  "subdomain": "watpl"
+}
