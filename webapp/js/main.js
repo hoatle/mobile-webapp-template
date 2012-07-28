@@ -31,7 +31,7 @@
       'underscore': 'lib/underscore/underscore-1.3.3',
       'backbone': 'lib/backbone/backbone-0.9.2',
       'Backbone.ModelBinder': 'lib/backbone/plugins/Backbone.ModelBinder-0.1.5',
-      'bootstrap': 'lib/jquery/plugins/bootstrap-2.0.4',
+      'jquery.mobile': 'lib/jquery/plugins/jquery.mobile-1.1.1',
       'jquery.log': 'lib/jquery/plugins/jquery.log-1.0.0'
     },
 
@@ -64,7 +64,12 @@
       },
 
       //jquery plugins
-      'bootstrap': ['jquery'],
+      //'bootstrap': ['jquery'],
+
+      'jquery.mobile': {
+        deps: ['jquery'],
+        exports: 'jQuery.mobile'
+      },
 
       'jquery.log': {
         deps: ['jquery'],
@@ -117,12 +122,14 @@
   require(
     [
       'jquery',
-      'bootstrap',
+      'jqm-config',
+      'jquery.mobile',
       'jquery.log',
       'backbone',
       'Backbone.ModelBinder'
     ],
-    function($) {
+    function($, jqmConfig) {
+
 
       //fake 'has' if it's not available
       var has = root.has = root.has || function() {
@@ -133,6 +140,9 @@
       if (has('prod')) {
         $.log.setLevel($.log.LEVEL.info);
       }
+
+      //jquery mobile config
+      jqmConfig.configure();
 
       //boot the application
 

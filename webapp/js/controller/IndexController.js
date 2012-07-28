@@ -33,7 +33,8 @@ define(
 
       initialize: function() {
         indexView = new IndexView({
-          $container: $('.watpl-container')
+          $container: $('body'),
+          appendable: true
         });
       },
 

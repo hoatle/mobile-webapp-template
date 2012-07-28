@@ -15,20 +15,39 @@
  */
 
 /**
- * The Index view
+ * The Base jQuery Mobile view
  */
 define(
   [
     'jquery',
+    'jquery.mobile',
     'underscore',
     'backbone',
-    'view/BaseMobileView',
-    'text!../template/IndexTemplate.html'
+    'view/BaseView'
   ],
-  function($, _, Backbone, BaseMobileView, textTemplate) {
+  function ($, $jqMobile, _, Backbone, BaseView) {
 
-    return BaseMobileView.extend({
-      textTemplate: textTemplate
+    return BaseView.extend({
+      render:function () {
+        this.beforeRender();
+
+        var c = this.container();
+        if (this.appendable) {
+          c.append(this.$el);
+        } else {
+          c.html(this.$el);
+        }
+
+        $jqMobile.changePage(this.$el, {changeHash:false});
+
+        this.delegateEvents();
+
+        this.afterRender();
+
+        this.rendered = true;
+
+        return this;
+      }
     });
   }
 );
