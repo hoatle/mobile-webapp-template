@@ -28,7 +28,10 @@ define(
   function($, _, Backbone, BaseView, textTemplate) {
 
     return BaseView.extend({
-      textTemplate: textTemplate
+      textTemplate: textTemplate,
+      beforeRender: function() {
+        $('#app-boot').length > 0 && $('#app-boot').remove();
+      }
     });
   }
 );

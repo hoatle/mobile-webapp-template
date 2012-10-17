@@ -22,13 +22,15 @@
     'domReady': 'lib/require/plugins/domReady-2.0.0',
     'text': 'lib/require/plugins/text-2.0.1',
     'handlebars': 'lib/handlebars/handlebars-1.0.0.beta.6',
+    'handlebars.helper': 'lib/handlebars/helper',
     'json2': 'lib/json/json2',
+    'base64': 'lib/base64/base64-0.1.0',
     'jquery': 'lib/jquery/jquery-1.7.1',
     'underscore': 'lib/underscore/underscore-1.3.3',
     'backbone': 'lib/backbone/backbone-0.9.2',
     'Backbone.ModelBinder': 'lib/backbone/plugins/Backbone.ModelBinder-0.1.5',
-    'jquery.mobile': 'lib/jquery/plugins/jquery.mobile-1.1.1',
-    'jquery.log': 'lib/jquery/plugins/jquery.log-1.0.0'
+    'jquery.mobile': 'empty:',
+    'jquery.log': 'lib/jquery/plugins/jquery.log-0.1.0'
   },
   shim: {
 
@@ -62,7 +64,7 @@
     //'bootstrap': ['jquery'],
 
     'jquery.mobile': {
-      deps: ['jquery'],
+      deps: ['jquery', 'jqm-config'],
       exports: 'jQuery.mobile'
     },
 
@@ -82,8 +84,10 @@
       name: "main",
       //include dynamic controller here for included into main
       include: [
-        'controller/HelloWorldController',
-        'controller/UserController'
+        'controller/IndexController',
+        'controller/PagesAndDialogsController',
+        'controller/ToolbarsController',
+        'controller/ButtonsController'
       ]
     }
   ],
@@ -107,7 +111,7 @@
   //used to pass configuration values to UglifyJS.
   //See https://github.com/mishoo/UglifyJS for the possible values.
   uglify: {
-    toplevel: true,
+    //toplevel: true, //See problem: https://github.com/hoatle/webapp-template/issues/27
     ascii_only: true,
     beautify: false,
     max_line_length: 10000

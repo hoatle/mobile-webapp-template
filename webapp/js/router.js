@@ -19,15 +19,16 @@
  */
 define(
   [
+    'jquery',
     'underscore',
     'backbone',
     'controller/IndexController',
     'controller/DefaultController'
   ],
-  function (_, Backbone, IndexController, DefaultController) {
+  function ($, _, Backbone, IndexController, DefaultController) {
 
-    var indexController = new IndexController(),
-      defaultController = new DefaultController();
+    var indexController,
+      defaultController;
 
     /**
      * Holds controller instance for caching purpose.
@@ -38,7 +39,38 @@ define(
 
     };
 
-    var Router = Backbone.Router.extend({
+    /**
+     * Holds previous and current controller instance for detecting back/forward button
+     */
+    var navigationStack = [];
+
+    function addToNavigationStack(controllerInstance) {
+      if (navigationStack.length < (this.options.maxNavigationStackLength || 10)) {
+        navigationStack.push(controllerInstance);
+      } else {
+        navigationStack.shift(controllerInstance);
+        navigationStack.push(controllerInstance);
+      }
+
+      if (navigationStack.length > 1) {
+        //set isBackNavigated
+        var  controllerName = controllerInstance.name,
+             controllerFlowInfo = this.findControllerFlowInfo(controllerName);
+
+        $.debug('router::addNavigationStack | controllerFlowInfo', controllerFlowInfo);
+
+        var previousNavigationStackName = navigationStack[navigationStack.length - 2].name;
+
+        if (controllerFlowInfo.previous.name === previousNavigationStackName) {
+          $.debug('router::addNavigationStack | controllerFlowInfo.previous.name matched', controllerFlowInfo.previous);
+          controllerInstance.isBackNavigated = false;
+        } else {
+          controllerInstance.isBackNavigated = true;
+        }
+      }
+    }
+
+    return Backbone.Router.extend({
       /**
        * Controller mapping from controller name on url to controller name on 'controller' folder.
        *
@@ -92,7 +124,7 @@ define(
       },
 
       initialize: function (options) {
-
+        this.options = options || {};
       },
 
       dispatchController: function(controller, action, params) {
@@ -111,7 +143,7 @@ define(
 
         if (cachedControllerInstance) {
 
-          processController(cachedControllerInstance);
+          processController.call(this, cachedControllerInstance);
 
         } else {
 
@@ -119,10 +151,14 @@ define(
             [
               'controller/' + controllerName
             ], function(Controller) {
-              var controllerInstance = new Controller();
+              var controllerInstance = new Controller({
+                name: controllerName,
+                router: self
+              });
               cachedControllers[controllerName] = controllerInstance;
 
-              processController(controllerInstance);
+              processController.call(self, controllerInstance);
+
             }, function(err) { //not found matching controller
               $.warn('AppRouter#dispatchController: Error for loading controller: ' + controller, err);
               self.defaultController(_getRouteFragment.call(self, controller, action, params));
@@ -132,6 +168,10 @@ define(
         }
 
         function processController(controllerInstance) {
+          addToNavigationStack.call(this, controllerInstance);
+
+          controllerInstance.trigger('actionStart');
+
           if (action) {
             var methodAction = controllerInstance.actions[action];
             if (methodAction && $.isFunction(controllerInstance[methodAction])) {
@@ -140,22 +180,54 @@ define(
               methodAction.call(controllerInstance, params);
             } else if ($.isFunction(controllerInstance[action])) { //convention over configuration
               controllerInstance[action](params);
+            } else { //there is no-matched action, call default action
+              params = params ? action + '/' + params : action;
+              controllerInstance.index(params);
             }
           } else {
             //default action
             controllerInstance.index();
           }
+
+          controllerInstance.trigger('actionFinish');
         }
       },
 
       defaultController: function(params) {
+        if (!defaultController) {
+          defaultController = new DefaultController({
+            name: 'DefaultController',
+            router: this
+          });
+        }
+        addToNavigationStack.call(this, defaultController);
+        defaultController.trigger('actionStart');
         defaultController.index(params);
+        defaultController.trigger('actionFinish');
       },
 
       indexController: function(params) {
+        if (!indexController) {
+          indexController = new IndexController({
+            name: 'IndexController',
+            router: this
+          });
+        }
+        addToNavigationStack.call(this, indexController);
+        indexController.trigger('actionStart');
         indexController.index(params);
+        indexController.trigger('actionFinish');
       },
 
+      /**
+       * Gets the navigation route stack.
+       * This could be used for work flow determination
+       *
+       * @return {Array}
+       */
+      getNavigationRouteStack: function() {
+        return navigationStack;
+      },
 
       //start the application
       start: function () {
@@ -174,5 +246,4 @@ define(
       return routeFragment;
     }
 
-    return Router;
   });

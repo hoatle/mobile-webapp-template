@@ -20,20 +20,29 @@
   var root = this,
     require = root.require;
 
+  //fake 'has' if it's not available
+  var has = root.has = root.has || function() {
+    return false;
+  };
+
   // Require.js allows us to configure shortcut alias
   require.config({
     paths: {
       'domReady': 'lib/require/plugins/domReady-2.0.0',
       'text': 'lib/require/plugins/text-2.0.1',
       'handlebars': 'lib/handlebars/handlebars-1.0.0.beta.6',
+      'handlebars.helper': 'lib/handlebars/helper',
       'json2': 'lib/json/json2',
+      'base64': 'lib/base64/base64-0.1.0',
       'jquery': 'lib/jquery/jquery-1.7.1',
       'underscore': 'lib/underscore/underscore-1.3.3',
       'backbone': 'lib/backbone/backbone-0.9.2',
       'Backbone.ModelBinder': 'lib/backbone/plugins/Backbone.ModelBinder-0.1.5',
-      'jquery.mobile': 'lib/jquery/plugins/jquery.mobile-1.1.1',
-      'jquery.log': 'lib/jquery/plugins/jquery.log-1.0.0'
+      'jquery.log': 'lib/jquery/plugins/jquery.log-0.1.0',
+      'jquery.mobile': 'lib/jquery/plugins/jquery.mobile-1.1.1'
     },
+
+    waitSeconds: has('prod') ? 2000 : 2, //2000 seconds for prod mode on bootstrap and 2 seconds for dev mode
 
     shim: {
 
@@ -43,6 +52,13 @@
 
       underscore: {
         exports: '_'
+      },
+
+      'jquery.log': {
+        deps: [
+          'jquery'
+        ],
+        exports: 'jQuery.log'
       },
 
       backbone: {
@@ -69,11 +85,6 @@
       'jquery.mobile': {
         deps: ['jquery'],
         exports: 'jQuery.mobile'
-      },
-
-      'jquery.log': {
-        deps: ['jquery'],
-        exports: 'jQuery.fn.log'
       }
     }
 
@@ -84,7 +95,7 @@
   var updateModuleProgress = function(context, map, depMaps) {
     //when dom is not ready, do something more useful?
     var console = root.console;
-    if (console.log) {
+    if (console && console.log) {
       console.log('loading: ' + map.name + ' at ' + map.url);
     }
   };
@@ -122,30 +133,21 @@
   require(
     [
       'jquery',
+      'jquery.log',
       'jqm-config',
       'jquery.mobile',
-      'jquery.log',
       'backbone',
-      'Backbone.ModelBinder'
+      'Backbone.ModelBinder',
+      'handlebars.helper'
     ],
-    function($, jqmConfig) {
-
-
-      //fake 'has' if it's not available
-      var has = root.has = root.has || function() {
-        return false;
-      };
+    function($) {
 
       //if it's prod mode, set log level to 'info'
       if (has('prod')) {
-        $.log.setLevel($.log.LEVEL.info);
+        $.log.setLevel($.log.LEVEL.INFO);
       }
 
-      //jquery mobile config
-      jqmConfig.configure();
-
       //boot the application
-
       require(['app'], function(app) {
         app.initialize();
       });

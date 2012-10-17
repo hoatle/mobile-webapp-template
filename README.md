@@ -1,35 +1,15 @@
-catalog_display
-===============
+# mobile-webapp-template [![Build Status](https://secure.travis-ci.org/hoatle/mobile-webapp-template.png?branch=master)](http://travis-ci.org/hoatle/mobile-webapp-template)
 
-
-API Files
-------------
-
-Contain two sections. The first section is the schema of the "model" and the second section is sample data, in JSON format, as it would be delivered by the server side API. 
-
-Relationships are described in the schema sections. In the two initial files, for the Catalog display, we have JSON models for Category and Product, which in effect have a many-to-many relationship (e.g. a product can exist in several Categories and a Category can be associated with any number of Products). However in this case, Categories are hierarchical; there are two top-level categories that contain sub-categories.
-
-Note that the data are served such that there are two top-level keys, 'Meta' and 'Objects.' The actual data are under Objects. Rewriting the Backbone parse function would probably help.
-
-Note Products have a set of images associated with them. Normally, it will be one main image with variants that have been resized on the server side. Each variant has its own url. These are returned in a JSON data package under "image_urls" as a javascript dictionary with the url name(description) as the key and the url itself as the value. The catalog layout should include the image of the appropriate size--even though you won't have sample images just now. 
-
-Initial Design Goals
--------------------------
-The initial goal is to present the catalog in a mobile format, using the top-level categories only (for now).
-
-* The application must be a Backbone application, and must use Backbone Collections and Views for further structure.
-* Backbone.Marionette is fine to use to remove some of the boilerplate code in Backbone.
-* App would ideally be written in Coffeescript, but Javascript is fine as well, assuming it matches up with Google's Javascript style guides.
-* The UI Widgets should be from jQueryMobile.
-
-* UI should be a simple presentation of products, separated according to top-level category.
-* UI should contain an unobtrusive way of swapping between category views.
-* UI should assume each product will have an image (see above).
-
+Mobile web app template bases on web app template: Mobile web application structure template (layout), starting point for backbone + requirejs + jQuery Mobile compiled by nodejs and running on any web server or phonegap environment :-)
 
 ## Live development deployment at:
-* http://catalog-hoatle.dotcloud.com/
+* http://mwatpl-hoatle.dotcloud.com/
+* http://mwatpl.herokuapp.com
+* http://mwatpl.jit.su/ (dev mod)
+* http://mwatpl.ap01.aws.af.cm/ (dev mode)
+* http://mwatpl.nodester.com/ (dev mode)
 
+## See the base web app template at: https://github.com/hoatle/webapp-template
 
 ## MVC
 + take advantage of convention over configuration.

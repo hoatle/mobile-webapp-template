@@ -25,8 +25,13 @@ define(
   ],
   function($, _, Backbone) {
 
-    var Controller = function() {
+    var Controller = function(options) {
+      this.options = options || {};
+      this.router = this.options.router;
+      this.name = this.options.name;
+      this.trigger('beforeInitialize', arguments);
       this.initialize.apply(this, arguments);
+      this.trigger('afterInitialize', arguments);
     };
 
     //inherits from backbond
@@ -72,7 +77,7 @@ define(
 
       //the default action, should be overridden by controllers if there is no action matched.
       index: function(params) {
-        $.log('Controller#index is not overridden with params: ' + params);
+        $.error('Controller#index is not overridden with params: ' + params);
       }
 
     });

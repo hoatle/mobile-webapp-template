@@ -47,6 +47,12 @@ define(
        * @param options the options literal object, usually have: $container, model and appendable attribute.
        */
       initialize: function(options) {
+
+        //hold the initial options for subclass's reference
+        this.options = options || {};
+
+        this.controller = this.options.controller;
+
         //the global pubSub channel for all views to share common triggers and event handlers.
         //this is useful when there are many nested views and we want to communicate with top most views.
         //very useful for views' communication.
@@ -67,8 +73,11 @@ define(
         this.model = this.model || options.model || new Backbone.Model();
         this.appendable = this.appendable || options.appendable;
 
-        if (this.textTemplate) {
+        if (this.textTemplate && !this.template) {
           this.template = HandleBars.compile(this.textTemplate);
+        }
+
+        if (this.template) {
           var model = this.model.toJSON ? this.model.toJSON() : this.model;
           this.setElement(this.template(model));
         }

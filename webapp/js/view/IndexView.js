@@ -28,7 +28,11 @@ define(
   function($, _, Backbone, BaseMobileView, textTemplate) {
 
     return BaseMobileView.extend({
-      textTemplate: textTemplate
+      textTemplate: textTemplate,
+
+      beforeInitialize: function() {
+
+      }
     });
   }
 );

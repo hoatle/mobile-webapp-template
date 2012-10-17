@@ -22,27 +22,29 @@ define(
     'jquery',
     'underscore',
     'backbone',
-    'controller/Controller',
+    'controller/MobileController',
     'view/IndexView'
   ],
-  function($, _, Backbone, Controller, IndexView) {
+  function($, _, Backbone, MobileController, IndexView) {
 
-    var indexView;
-
-    var IndexController = Controller.extend({
+    return MobileController.extend({
 
       initialize: function() {
-        indexView = new IndexView({
+
+        this.transition = 'pop';
+
+        this.indexView = new IndexView({
           $container: $('body'),
-          appendable: true
+          appendable: true,
+          controller: this
         });
+
       },
 
       index: function() {
-        indexView.render();
+
+        this.indexView.render();
       }
     });
-
-    return IndexController;
   }
 );

@@ -27,8 +27,31 @@ define(
   ],
   function ($, $jqMobile, _, Backbone, BaseView) {
 
+    var appBooted = false;
+
+    // this will exclude external links (starting with http://) or hash link (starting with #)
+    // the link href will be used for router's dispatching.
+    function attachRouterToLinks() {
+
+      this.$('a:not([href^="http://"])').off('click').on('click', $.proxy(function(e) {
+        var link = $(e.currentTarget).attr('href');
+        if (link.indexOf('#') === 0) {
+          return;
+        }
+        //if the link start with hash '#' => ignore
+        e.preventDefault();
+        this.controller.router.dispatch(link, {
+          trigger: true
+        });
+
+      }, this));
+    }
+
     return BaseView.extend({
       render:function () {
+
+        $.debug('BaseMobileView::this.options', this.options);
+
         this.beforeRender();
 
         var c = this.container();
@@ -38,13 +61,64 @@ define(
           c.html(this.$el);
         }
 
-        $jqMobile.changePage(this.$el, {changeHash:false});
+        //remove splash screen if app not booted
+        if (!appBooted) {
+          $('#app-boot').hide();
+          appBooted = true;
+        }
 
-        this.delegateEvents();
+        attachRouterToLinks.call(this);
 
-        this.afterRender();
+        var transition = this.controller.transition,
+          reverseTransition = this.controller.getReverseTransition();
 
-        this.rendered = true;
+        //TODO this is weird to avoid: Uncaught TypeError: Cannot call method 'trigger' of undefined
+        //this could be the problem of: jquery mobile is not fully initialized
+
+        if (!$jqMobile.pageContainer) {
+
+          $(window).on('pagecontainercreate', $.proxy(function() {
+
+            $.debug('pagecontainercreate is triggered');
+
+            setTimeout($.proxy(function() {
+
+              $jqMobile.changePage(this.$el, {
+                changeHash:false,
+                transition: transition
+              });
+
+              this.delegateEvents();
+
+              this.afterRender();
+
+              this.rendered = true;
+
+            }, this), 300);
+
+          }, this));
+
+        } else {
+
+          var opts = {
+            changeHash: false,
+            transition: transition
+          };
+
+          if (reverseTransition) {
+            opts.reverse = true;
+            opts.transition = reverseTransition;
+          }
+
+          $jqMobile.changePage(this.$el, opts);
+
+          this.delegateEvents();
+
+          this.afterRender();
+
+          this.rendered = true;
+
+        }
 
         return this;
       }
