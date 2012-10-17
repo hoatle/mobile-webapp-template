@@ -1,14 +1,14 @@
 {
-  "name": "webapp-template",
+  "name": "mobile-webapp-template",
   "version": "0.0.1",
-  "description": "A web application template that manages the mapping and dispatching of action handlers with powerful APIs for your application",
+  "description": "A mobile web application template that manages the mapping and dispatching of action handlers with powerful APIs for your application",
   "keywords": [
-    "webapp-template",
-    "web application"
+    "mobile-webapp-template",
+    "mobile web application"
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com/hoatle/webapp-template.git"
+    "url": "git@github.com/hoatle/mobile-webapp-template.git"
   },
   "author": "Hoat Le <hoatlevan@gmail.com> (http://hoatle.net)",
   "contributors": [],
@@ -37,5 +37,5 @@
     "npm": "1.1.x"
   },
   "node": "0.6.19",
-  "subdomain": "watpl"
+  "subdomain": "mwatpl"
 }
