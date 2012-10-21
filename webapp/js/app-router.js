@@ -48,34 +48,6 @@ define(
             name: 'ButtonsController'
           }
         ]
-      },
-
-      findControllerFlowInfo: function(controllerName) {
-
-        var previousElement = {}, foundElement = {};
-
-        function searchTree(element, matchingName) {
-          if (element.name === matchingName) {
-            foundElement = element;
-          } else if (element.children) {
-            var result;
-            for (var i = 0, len = element.children.length; i < len; i++) {
-              previousElement = element;
-              result = searchTree(element.children[i], matchingName);
-              if (result.found.name) {
-                break;
-              }
-            }
-            return result;
-          }
-
-          return {
-            'previous': previousElement,
-            'found': foundElement
-          };
-        }
-
-        return searchTree(this.controllerFlow, controllerName);
       }
     });
   }

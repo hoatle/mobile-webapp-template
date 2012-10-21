@@ -30,7 +30,9 @@ define(
     return BaseView.extend({
       textTemplate: textTemplate,
       beforeRender: function() {
-        $('#app-boot').length > 0 && $('#app-boot').remove();
+        if ($('#app-boot').length > 0) {
+          $('#app-boot').remove();
+        }
       }
     });
   }
