@@ -57,18 +57,14 @@ http://stackoverflow.com/questions/6468015/run-node-js-application-in-debug-with
 https://groups.google.com/forum/?fromgroups#!topic/nodejs/qTlGXNYIy1U
 https://github.com/isaacs/node-supervisor/pull/50
 
-## Develop web application for phonegap?
-* On Android:
-  * Copy all files and directories of ```webapp-template``` to ```assets``` directory
-  * Copy ```cordova-{version}.js``` to ```webapp``` directory
-  * On **dev mode**: Set ```super.loadUrl("file:///android_asset/webapp/index.html");```
-  * On **prod mode**:
-      * Run these commands: ```make resolve```, then ```make install```
-      * Set ```super.loadUrl("file:///android_asset/public/index.html");```
-  * Packaging:
-      * Make sure on prod mode
-      * Keep only ```public``` directory
-      * Packaging the app as normal Android application and you're done :-)
+## Package web application for phonegap
+
++ There are 2 directories (ios, android) for wrap the web app into native app.
++ Make sure to get phone gap environment and you could create, build, emulate the project on this page: http://docs.phonegap.com/en/2.2.0/guide_command-line_index.md.html
++ ```make resolve```, then ```make install``` to build the web app project into ```public``` directory.
++ Make symbolic link of ```ios/www``` and ```android/assets/www``` to ```public``` directory
++ To build android app, make sure to update the sdk with this command: ```android update project -p android/``` to generate android/local.properties file
++ To package the native app, go to ios/cordova or android/cordova and use commands: ```debug```, ```emulate``` to see the result.
 
 ## Make build lifecycle phrases:
 

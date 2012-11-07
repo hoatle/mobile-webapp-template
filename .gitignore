@@ -10,3 +10,9 @@ target
 node_modules
 public
 webapp/css/application.css
+gen
+out
+bin
+build
+android/local.properties
+console.log
